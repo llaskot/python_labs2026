@@ -36,9 +36,8 @@ curl -LsSf [https://astral.sh/uv/install.sh](https://astral.sh/uv/install.sh) | 
 
 1. **Clone the repository:**
    ```bash
-   git clone git@github.com:llaskot/sw_architecture_project.git
-   cd pashnev_project
-   
+   git clone git@github.com:llaskot/python_labs2026.git
+   cd python_labs
 # 1.1. Build and run Mongo DB in container
 ```commandline
 docker-compose up --build
