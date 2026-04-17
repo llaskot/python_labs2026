@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 from app.database import client, setup_db
 from app.users import users_router
 from app.auth import auth_router
+from app.ips import ips_router
 
 
 
@@ -27,6 +28,8 @@ async def read_hello():
 
 app.include_router(users_router)
 app.include_router(auth_router)
+
+app.include_router(ips_router)
 
 
 
