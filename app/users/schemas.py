@@ -5,7 +5,7 @@ from pydantic import EmailStr, Field, BaseModel, field_validator, ConfigDict, Be
 
 class UserCreate(BaseModel):
     """Creation by admin scheme"""
-    email: EmailStr  # Авто-валидация формата почты
+    email: EmailStr
     login: str = Field(..., min_length=6, max_length=20)
     password: str = Field(..., min_length=6)
     first_name: str = Field(..., min_length=1)
@@ -16,7 +16,7 @@ class UserCreate(BaseModel):
 
 class UserRegistrate(BaseModel):
     """Registration user info scheme"""
-    email: EmailStr  # Авто-валидация формата почты
+    email: EmailStr
     login: str = Field(..., min_length=6, max_length=20)
     password: str = Field(..., min_length=6)
     first_name: str = Field(..., min_length=1)
@@ -26,7 +26,7 @@ class UserRegistrate(BaseModel):
 
 class UserUpdate(BaseModel):
     """Updating by admin scheme"""
-    email: EmailStr  # Авто-валидация формата почты
+    email: EmailStr
     login: Optional[str] = Field(None, min_length=6, max_length=20)
     first_name: Optional[str] = Field(None, min_length=1)
     last_name: Optional[str] = Field(None, min_length=1)
@@ -53,12 +53,7 @@ class UserResponseAdm(BaseModel):
         populate_by_name=True,
         protected_namespaces=()
     )
-#
-# class UserResponse(UserResponseBasic):
-#     """Полный вариант: всё то же самое + конфиденциальные данные"""
-#     email: EmailStr
-#     login: str
-#
+
 class UserPermissionsDto(BaseModel):
     id: str
     active: bool

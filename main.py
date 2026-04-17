@@ -1,11 +1,12 @@
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
 from app.database import client, setup_db
 from app.users import users_router
 from app.auth import auth_router
 from app.ips import ips_router
+from front import pages_router
+from app.books import book_router
 
 
 
@@ -17,19 +18,14 @@ async def lifespan(_: FastAPI):
     client.close()
 
 app = FastAPI(lifespan=lifespan)
-@app.get("/")
-async def read_index():
-    return FileResponse("static/index.html")
-
-@app.get("/hello")
-async def read_hello():
-    return FileResponse("static/hello.html")
 
 
 app.include_router(users_router)
 app.include_router(auth_router)
-
 app.include_router(ips_router)
+app.include_router(pages_router)
+
+app.include_router(book_router)
 
 
 
