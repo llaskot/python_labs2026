@@ -1,20 +1,22 @@
-from fastapi import Response, Request, HTTPException, APIRouter
+from fastapi import Response, Request, HTTPException, APIRouter, Depends
 from pymongo.errors import PyMongoError
 
 from .schemas import IpCheck, IpResponse
 from .service import IpService
+from app.auth import check_token
+from app.users import UserPermissionsDto
 
 router = APIRouter(prefix="/ips", tags=["IPs"])
 
 
 @router.post("/",
-             response_model=IpResponse,
+             response_model=IpResponse
              )
 async def find_by_ip(data: IpCheck,
-                     response: Response):
+                     user: UserPermissionsDto = Depends(check_token)):
     auth_service = IpService()
     try:
-        ip_info = await auth_service.find_by_ip(data)
+        ip_info = await auth_service.find_by_ip(data, user)
         return ip_info
 
     except HTTPException as e:

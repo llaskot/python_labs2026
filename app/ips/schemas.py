@@ -1,4 +1,5 @@
-from typing import Annotated, Optional, Union
+from datetime import datetime, timezone
+from typing import Annotated, Optional, Union, Any
 
 from bson import ObjectId
 from pydantic import EmailStr, Field, BaseModel, field_validator, ConfigDict, BeforeValidator, IPvAnyAddress, \
@@ -8,9 +9,14 @@ from pydantic import EmailStr, Field, BaseModel, field_validator, ConfigDict, Be
 class IpCreate(BaseModel):
     """Save schema"""
     model_config = ConfigDict(
+        arbitrary_types_allowed=True,
         extra='allow'
     )
     ip: str
+    requested_by: list[ObjectId] = Field(default_factory=list)
+    requested_at: list[datetime] = Field(
+        default_factory=lambda: [datetime.now(timezone.utc)]
+    )
 
 class IpCheck(BaseModel):
     """get schema"""
@@ -26,11 +32,15 @@ class IpCheck(BaseModel):
 
 class IpUpdate(BaseModel):
     """update schema"""
-    ip: IPvAnyAddress
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+    )
+    requested_by: ObjectId
+    requested_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class IpResponse(BaseModel):
-    """Save schema"""
+    """Response schema"""
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
         populate_by_name=True,
@@ -38,6 +48,8 @@ class IpResponse(BaseModel):
     )
     id: str = Field(None, alias="_id")
     ip: IPvAnyAddress
+    requested_by: Any = Field(exclude=True, default=None)
+    requested_at: Any = Field(exclude=True, default=None)
 
     @field_validator("id", mode="before")
     @classmethod

@@ -23,6 +23,7 @@ class AuthService:
 
     ENV_PASSPHRASE: Final = os.getenv("SECRET_KEY")
     REFRESH_AGE: Final = 48 * 60 * 60
+    TOKEN_LIFE: Final = 40 * 60
 
     #
     def _get_generated_key(self):
@@ -83,7 +84,7 @@ class AuthService:
 
     def create_token(self, payload: dict):
         key = os.getenv("JWT_SOLT")
-        payload["exp"] = int(time.time()) + (10 * 60)
+        payload["exp"] = int(time.time()) + AuthService.TOKEN_LIFE
         access = jwt.encode(payload, key, algorithm="HS256")
         payload["exp"] = int(time.time()) + AuthService.REFRESH_AGE
         refresh = jwt.encode(payload, key, algorithm="HS256")

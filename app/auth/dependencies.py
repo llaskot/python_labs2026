@@ -8,7 +8,8 @@ security_token = HTTPBearer()
 
 async def check_token(auth: HTTPAuthorizationCredentials = Depends(security_token)) -> UserPermissionsDto:
     token = auth.credentials
-    payload = AuthService.decode_token(token)
+    service = AuthService()
+    payload = service.decode_token(token)
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
     if not payload.active:
