@@ -48,8 +48,8 @@ class IpResponse(BaseModel):
     )
     id: str = Field(None, alias="_id")
     ip: IPvAnyAddress
-    requested_by: Any = Field(exclude=True, default=None)
-    requested_at: Any = Field(exclude=True, default=None)
+    requested_by: list[str] = Field(exclude=False, default=None)
+    requested_at: Any = Field(exclude=False, default=None)
 
     @field_validator("id", mode="before")
     @classmethod
@@ -57,4 +57,13 @@ class IpResponse(BaseModel):
         if v is None:
             raise ValueError("ID is missing")
         return str(v)
+
+    @field_validator("requested_by", mode="before")
+    @classmethod
+    def transform_requested_by(cls, v: Any) -> list[str]:
+        if isinstance(v, list):
+            return [str(item) for item in v]
+        if v is None:
+            return []
+        return [str(v)]
 
