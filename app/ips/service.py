@@ -1,3 +1,5 @@
+from typing import Any
+
 import bcrypt
 import httpx
 from bson import ObjectId
@@ -15,7 +17,7 @@ class IpService(AbstractService[IpCreate, IpUpdate]):
     def __init__(self):
         super().__init__(ip_repo)
 
-    async def find_by_ip(self, data: IpCheck, user: UserPermissionsDto) -> IpCheck:
+    async def find_by_ip(self, data: IpCheck, user: UserPermissionsDto) -> Any:
         res = None
         try:
             # res = await self.repo.get_by_ip(data.ip)
